@@ -126,7 +126,7 @@
   .hero h1 em{
     font-style:normal;
     color:var(--cyan);
-    font-size:.65em;
+    font-size:.4em;
     font-weight:600;
     display:inline-block;
     margin-top:8px;
@@ -199,8 +199,8 @@
   }
   .pull{
     font-family:'Space Grotesk', sans-serif;
-    font-size:26px;
-    line-height:1.4;
+    font-size:22px;
+    line-height:1.5;
     font-weight:500;
     color:var(--ink);
   }
@@ -327,6 +327,49 @@
     color:var(--cyan);
   }
 
+  /* EDUCATION */
+  .edu-list{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    background:var(--grid-line);
+    border:1px solid var(--grid-line);
+  }
+  .edu-item{
+    background:var(--blue-mid);
+    padding:24px 28px;
+    display:grid;
+    grid-template-columns:1.5fr 1fr auto;
+    gap:20px;
+    align-items:center;
+  }
+  .edu-item .edu-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    display:block;
+    margin-bottom:6px;
+  }
+  .edu-item .edu-degree{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:17px;
+    font-weight:600;
+  }
+  .edu-item .edu-school{
+    font-size:13.5px;
+    color:var(--ink-dim);
+  }
+  .edu-item .edu-dates{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--ink-dim);
+    letter-spacing:.05em;
+    text-align:right;
+    white-space:nowrap;
+  }
+
   /* CONTACT */
   .signoff{
     border:1px solid var(--grid-line);
@@ -358,21 +401,33 @@
   .btn.solid{background:var(--cyan);color:var(--blue-deep);}
   .btn.solid:hover{background:transparent;color:var(--cyan);}
 
-  .stamp{
+  .signoff-visual{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
     justify-self:end;
-    width:150px;height:150px;
-    border:2px solid var(--amber);
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    transform:rotate(-8deg);
-    text-align:center;
   }
-  .stamp span{
+  .photo-label{
     font-family:'IBM Plex Mono', monospace;
-    font-size:11px;letter-spacing:.12em;
-    color:var(--amber);
+    font-size:11px;
+    letter-spacing:.14em;
     text-transform:uppercase;
-    line-height:1.6;
+    color:var(--cyan);
+    border:1px solid var(--grid-line);
+    padding:8px 22px;
+    margin-bottom:20px;
+  }
+  .photo-frame{
+    width:150px;height:150px;
+    border:1.5px solid var(--amber);
+    border-radius:50%;
+    overflow:hidden;
+    margin-bottom:24px;
+  }
+  .photo-frame img{
+    width:100%;height:100%;
+    object-fit:cover;
+    display:block;
   }
 
   footer{
@@ -445,7 +500,9 @@
     .titleblock{grid-template-columns:repeat(2,1fr);}
     .titleblock div:nth-child(2){border-right:none;}
     .about-grid, .levels, .legend, .signoff{grid-template-columns:1fr;}
-    .stamp{justify-self:start;}
+    .edu-item{grid-template-columns:1fr;gap:6px;}
+    .edu-item .edu-dates{text-align:left;}
+    .signoff-visual{justify-self:start;}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -468,6 +525,7 @@
       <a href="#about">About</a>
       <a href="#levels">Projects</a>
       <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
       <a href="#contact">Contact</a>
     </div>
   </nav>
@@ -506,11 +564,10 @@
       <h2>About</h2>
     </div>
     <div class="about-grid">
-      <p class="pull reveal">A game isn't just code and rules — it's <span>the feel of every interaction</span>. I work across the full pipeline, from C++ systems to the final texture pass, and a background in film gives me an eye for pacing and framing along the way.</p>
+      <p class="pull reveal">I am a final-year Digital Game Design student at Bahçeşehir University, focusing on <span>Unreal Engine 5 development</span> with C++ and Blueprints. I also studied Cinema, and my passion for both games and visual storytelling shapes the way I approach development and game design. I have additional hands-on experience in UI design, animation, 3D modeling, and texturing.</p>
       <div class="notes">
         <div class="note reveal"><b>Focus:</b> Gameplay programming in C++, Blueprint scripting, technical implementation.</div>
         <div class="note reveal"><b>Tools:</b> Unreal Engine 5, C++, Blueprint, Maya, Blender, Substance Painter.</div>
-        <div class="note reveal"><b>Education:</b> Bahçeşehir University — Major in Digital Game Design, Minor in Cinema and Television.</div>
         <div class="note reveal"><b>Approach:</b> I move fast between code, animation and art — prototype, iterate, polish.</div>
       </div>
     </div>
@@ -641,9 +698,34 @@
     </div>
   </section>
 
-  <section id="contact">
+  <section id="education">
     <div class="section-head">
       <span class="num">04</span>
+      <h2>Education</h2>
+    </div>
+    <div class="edu-list">
+      <div class="edu-item reveal">
+        <div>
+          <span class="edu-tag">Major</span>
+          <div class="edu-degree">Digital Game Design</div>
+        </div>
+        <div class="edu-school">Bahçeşehir University</div>
+        <div class="edu-dates">2021 — 2026</div>
+      </div>
+      <div class="edu-item reveal">
+        <div>
+          <span class="edu-tag">Minor</span>
+          <div class="edu-degree">Cinema and Television</div>
+        </div>
+        <div class="edu-school">Bahçeşehir University</div>
+        <div class="edu-dates">2023 — 2025</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="section-head">
+      <span class="num">05</span>
       <h2>Contact</h2>
     </div>
     <div class="signoff reveal">
@@ -652,11 +734,17 @@
         <p>Open to collaborations, freelance work, or just a chat about game dev — reach out anytime.</p>
         <div class="cta-row">
           <a class="btn solid" href="mailto:your.email@example.com">Send an email</a>
+          <a class="btn" href="cv.pdf" target="_blank" rel="noopener">Download CV</a>
           <a class="btn" href="https://www.linkedin.com/in/reberakdag/" target="_blank" rel="noopener">LinkedIn</a>
           <a class="btn" href="https://github.com/Hoviaq" target="_blank" rel="noopener">GitHub</a>
         </div>
       </div>
-      <div class="stamp"><span>APPROVED<br>REV. 01</span></div>
+      <div class="signoff-visual">
+        <div class="photo-frame">
+          <img src="photo.jpg" alt="Reber Akdag">
+        </div>
+        <span class="photo-label">Reber Akdag</span>
+      </div>
     </div>
   </section>
 

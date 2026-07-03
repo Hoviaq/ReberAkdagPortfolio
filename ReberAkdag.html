@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Name — Game Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue-deep: #101b2e;
+    --blue-mid: #16253d;
+    --grid-line: #2a4a6b;
+    --ink: #eaf2fa;
+    --ink-dim: #8ea3bd;
+    --cyan: #6ec1e4;
+    --amber: #f2a93b;
+    --paper: #0d1524;
+    --radius: 2px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--blue-mid);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:40px 40px;
+    background-position:-1px -1px;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:200px 200px;
+    opacity:.55;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .crop{
+    position:fixed;
+    width:22px;height:22px;
+    border-color:var(--cyan);
+    border-style:solid;
+    opacity:.55;
+    z-index:40;
+    pointer-events:none;
+  }
+  .crop.tl{top:14px;left:14px;border-width:2px 0 0 2px;}
+  .crop.tr{top:14px;right:14px;border-width:2px 2px 0 0;}
+  .crop.bl{bottom:14px;left:14px;border-width:0 0 2px 2px;}
+  .crop.br{bottom:14px;right:14px;border-width:0 2px 2px 0;}
+
+  a{color:inherit;text-decoration:none;}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;position:relative;z-index:1;}
+
+  .label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--cyan);
+  }
+
+  /* NAV */
+  header{
+    position:sticky;top:0;z-index:30;
+    backdrop-filter:blur(6px);
+    background:rgba(16,27,46,.72);
+    border-bottom:1px solid var(--grid-line);
+  }
+  nav.wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:64px;
+  }
+  .brand{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:16px;
+    letter-spacing:.02em;
+  }
+  .brand span{color:var(--cyan);}
+  .navlinks{display:flex;gap:28px;}
+  .navlinks a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    transition:color .2s;
+  }
+  .navlinks a:hover{color:var(--cyan);}
+
+  /* HERO */
+  .hero{
+    min-height:88vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:64px;
+    position:relative;
+  }
+  .hero .eyebrow{margin-bottom:22px;}
+  .hero h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(42px, 8vw, 96px);
+    line-height:.98;
+    letter-spacing:-.01em;
+    max-width:900px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--cyan);
+  }
+  .hero p.role{
+    margin-top:24px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:15px;
+    color:var(--ink-dim);
+    max-width:560px;
+    line-height:1.6;
+  }
+
+  .titleblock{
+    margin-top:64px;
+    border:1px solid var(--grid-line);
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+  }
+  .titleblock div{
+    padding:14px 18px;
+    border-right:1px solid var(--grid-line);
+  }
+  .titleblock div:last-child{border-right:none;}
+  .titleblock .tb-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    display:block;
+    margin-bottom:6px;
+  }
+  .titleblock .tb-value{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:14px;
+    color:var(--ink);
+  }
+
+  section{padding:120px 0;position:relative;}
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    margin-bottom:56px;
+  }
+  .section-head .num{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--ink-dim);
+    font-size:13px;
+  }
+  .section-head h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:34px;
+  }
+  .section-head::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--grid-line);
+  }
+
+  /* ABOUT */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:64px;
+    align-items:start;
+  }
+  .pull{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:26px;
+    line-height:1.4;
+    font-weight:500;
+    color:var(--ink);
+  }
+  .pull span{color:var(--cyan);}
+  .notes{display:flex;flex-direction:column;gap:18px;}
+  .note{
+    border-left:2px solid var(--amber);
+    padding:10px 0 10px 16px;
+    font-size:14px;
+    color:var(--ink-dim);
+    line-height:1.55;
+  }
+  .note b{color:var(--ink);font-weight:500;}
+
+  /* PROJECTS */
+  .levels{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:2px;
+    background:var(--grid-line);
+    border:1px solid var(--grid-line);
+  }
+  .level-card{
+    background:var(--blue-mid);
+    padding:0;
+    position:relative;
+    cursor:pointer;
+    overflow:hidden;
+  }
+  .level-thumb{
+    position:relative;
+    aspect-ratio:16/9;
+    background:linear-gradient(135deg, var(--blue-deep), #1c3350);
+    display:flex;align-items:center;justify-content:center;
+    border-bottom:1px solid var(--grid-line);
+    overflow:hidden;
+  }
+  .level-thumb img{
+    width:100%;height:100%;object-fit:cover;
+    opacity:.75;
+    transition:opacity .3s, transform .4s;
+  }
+  .level-card:hover .level-thumb img{opacity:1;transform:scale(1.03);}
+  .play-btn{
+    position:relative;z-index:2;
+    width:56px;height:56px;
+    border-radius:50%;
+    border:1.5px solid var(--cyan);
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(13,21,36,.55);
+    transition:transform .2s, background .2s;
+  }
+  .level-card:hover .play-btn{transform:scale(1.08);background:rgba(110,193,228,.15);}
+  .play-btn svg{width:16px;height:16px;fill:var(--cyan);margin-left:2px;}
+
+  .level-tag{
+    position:absolute;top:12px;left:12px;z-index:2;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;letter-spacing:.08em;
+    color:var(--blue-deep);
+    background:var(--cyan);
+    padding:4px 9px;
+  }
+
+  .level-info{padding:22px 24px 26px;}
+  .level-info h3{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:19px;font-weight:600;
+    margin-bottom:8px;
+  }
+  .level-info p{
+    font-size:13.5px;
+    color:var(--ink-dim);
+    line-height:1.6;
+    margin-bottom:14px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    border:1px solid var(--grid-line);
+    padding:4px 9px;
+  }
+
+  /* SKILLS / LEGEND */
+  .legend{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--grid-line);
+    border:1px solid var(--grid-line);
+  }
+  .legend-item{
+    background:var(--blue-mid);
+    padding:26px 24px;
+  }
+  .legend-item .symbol{
+    width:28px;height:28px;
+    border:1.5px solid var(--cyan);
+    margin-bottom:16px;
+    position:relative;
+  }
+  .legend-item .symbol::after{
+    content:"";
+    position:absolute;inset:6px;
+    border:1px solid var(--amber);
+  }
+  .legend-item h4{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:15px;font-weight:600;
+    margin-bottom:8px;
+  }
+  .legend-item ul{
+    list-style:none;
+    font-size:13px;
+    color:var(--ink-dim);
+    line-height:2;
+  }
+  .legend-item li::before{
+    content:"— ";
+    color:var(--cyan);
+  }
+
+  /* CONTACT */
+  .signoff{
+    border:1px solid var(--grid-line);
+    padding:56px;
+    position:relative;
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    gap:40px;
+    align-items:center;
+  }
+  .signoff h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:38px;
+    font-weight:600;
+    line-height:1.15;
+    margin-bottom:20px;
+  }
+  .signoff p{color:var(--ink-dim);font-size:14.5px;line-height:1.6;max-width:420px;}
+  .cta-row{margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;
+    padding:12px 20px;
+    border:1px solid var(--cyan);
+    color:var(--cyan);
+    transition:background .2s, color .2s;
+  }
+  .btn:hover{background:var(--cyan);color:var(--blue-deep);}
+  .btn.solid{background:var(--cyan);color:var(--blue-deep);}
+  .btn.solid:hover{background:transparent;color:var(--cyan);}
+
+  .stamp{
+    justify-self:end;
+    width:150px;height:150px;
+    border:2px solid var(--amber);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    transform:rotate(-8deg);
+    text-align:center;
+  }
+  .stamp span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;letter-spacing:.12em;
+    color:var(--amber);
+    text-transform:uppercase;
+    line-height:1.6;
+  }
+
+  footer{
+    padding:36px 0 60px;
+    border-top:1px solid var(--grid-line);
+    margin-top:60px;
+  }
+  footer .wrap{
+    display:flex;justify-content:space-between;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;color:var(--ink-dim);
+    letter-spacing:.06em;
+  }
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* MODAL */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(8,13,22,.88);
+    display:none;
+    align-items:center;justify-content:center;
+    z-index:100;
+    padding:24px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    width:100%;max-width:920px;
+    aspect-ratio:16/9;
+    background:#000;
+    position:relative;
+    border:1px solid var(--cyan);
+  }
+  .modal-box iframe{width:100%;height:100%;border:0;}
+  .modal-close{
+    position:absolute;top:-38px;right:0;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-dim);
+    cursor:pointer;
+  }
+  .modal-close:hover{color:var(--cyan);}
+
+  @media (max-width:760px){
+    .navlinks{display:none;}
+    .titleblock{grid-template-columns:repeat(2,1fr);}
+    .titleblock div:nth-child(2){border-right:none;}
+    .about-grid, .levels, .legend, .signoff{grid-template-columns:1fr;}
+    .stamp{justify-self:start;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .reveal{transition:none;opacity:1;transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="crop tl"></div>
+<div class="crop tr"></div>
+<div class="crop bl"></div>
+<div class="crop br"></div>
+
+<header>
+  <nav class="wrap">
+    <div class="brand">YOUR<span>·</span>NAME</div>
+    <div class="navlinks">
+      <a href="#about">Hakkımda</a>
+      <a href="#levels">Projeler</a>
+      <a href="#skills">Yetenekler</a>
+      <a href="#contact">İletişim</a>
+    </div>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <div class="label eyebrow">DESIGN DOCUMENT — REV. 01</div>
+    <h1>OYUN <em>TASARIMCISI</em><br>VE SİSTEM MİMARI</h1>
+    <p class="role">Mekanikleri kağıda döküp oynanabilir deneyimlere çeviriyorum. Level tasarımı, oyun sistemleri ve playtest odaklı iterasyon üzerine çalışıyorum.</p>
+
+    <div class="titleblock">
+      <div>
+        <span class="tb-label">İsim</span>
+        <span class="tb-value">Your Name</span>
+      </div>
+      <div>
+        <span class="tb-label">Rol</span>
+        <span class="tb-value">Game Designer</span>
+      </div>
+      <div>
+        <span class="tb-label">Konum</span>
+        <span class="tb-value">Türkiye</span>
+      </div>
+      <div>
+        <span class="tb-label">Durum</span>
+        <span class="tb-value">İş için müsait</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="section-head">
+      <span class="num">01</span>
+      <h2>Hakkımda</h2>
+    </div>
+    <div class="about-grid">
+      <p class="pull reveal">Bir oyun sadece kurallardan ibaret değildir — <span>oyuncunun hissettiği anların</span> tasarımıdır. Ben bu anları kurgulayan, test eden ve oynanabilir hale getiren kişiyim.</p>
+      <div class="notes">
+        <div class="note reveal"><b>Odak:</b> Mekanik tasarım, level akışı, oyuncu motivasyonu.</div>
+        <div class="note reveal"><b>Araçlar:</b> Unity, Unreal, Figma, Miro, Google Sheets (denge/ekonomi tabloları).</div>
+        <div class="note reveal"><b>Yaklaşım:</b> Hızlı prototip → playtest → iterasyon döngüsü ile çalışırım.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="levels">
+    <div class="section-head">
+      <span class="num">02</span>
+      <h2>Projeler</h2>
+    </div>
+
+    <div class="levels">
+
+      <div class="level-card reveal" data-video="dQw4w9WgXcQ">
+        <div class="level-thumb">
+          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Proje 1 video önizlemesi">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <span class="level-tag">LVL-01</span>
+        <div class="level-info">
+          <h3>Proje Adı Buraya</h3>
+          <p>Projenin kısa açıklaması: hangi mekanik, hangi problem üzerine çalışıldığı ve senin rolün.</p>
+          <div class="chips">
+            <span class="chip">Unity</span>
+            <span class="chip">Level Design</span>
+            <span class="chip">Solo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="level-card reveal" data-video="dQw4w9WgXcQ">
+        <div class="level-thumb">
+          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Proje 2 video önizlemesi">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <span class="level-tag">LVL-02</span>
+        <div class="level-info">
+          <h3>Proje Adı Buraya</h3>
+          <p>Projenin kısa açıklaması: hangi mekanik, hangi problem üzerine çalışıldığı ve senin rolün.</p>
+          <div class="chips">
+            <span class="chip">Unreal</span>
+            <span class="chip">Systems</span>
+            <span class="chip">Takım — 4 kişi</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="level-card reveal" data-video="dQw4w9WgXcQ">
+        <div class="level-thumb">
+          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Proje 3 video önizlemesi">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <span class="level-tag">LVL-03</span>
+        <div class="level-info">
+          <h3>Proje Adı Buraya</h3>
+          <p>Projenin kısa açıklaması: hangi mekanik, hangi problem üzerine çalışıldığı ve senin rolün.</p>
+          <div class="chips">
+            <span class="chip">Prototype</span>
+            <span class="chip">Game Jam</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="level-card reveal" data-video="dQw4w9WgXcQ">
+        <div class="level-thumb">
+          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Proje 4 video önizlemesi">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <span class="level-tag">LVL-04</span>
+        <div class="level-info">
+          <h3>Proje Adı Buraya</h3>
+          <p>Projenin kısa açıklaması: hangi mekanik, hangi problem üzerine çalışıldığı ve senin rolün.</p>
+          <div class="chips">
+            <span class="chip">Mobile</span>
+            <span class="chip">Economy Design</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="section-head">
+      <span class="num">03</span>
+      <h2>Yetenekler</h2>
+    </div>
+    <div class="legend">
+      <div class="legend-item reveal">
+        <div class="symbol"></div>
+        <h4>Tasarım</h4>
+        <ul>
+          <li>Mekanik &amp; sistem tasarımı</li>
+          <li>Level tasarımı</li>
+          <li>Oyun ekonomisi &amp; denge</li>
+        </ul>
+      </div>
+      <div class="legend-item reveal">
+        <div class="symbol"></div>
+        <h4>Araçlar</h4>
+        <ul>
+          <li>Unity / Unreal</li>
+          <li>Figma / Miro</li>
+          <li>Google Sheets</li>
+        </ul>
+      </div>
+      <div class="legend-item reveal">
+        <div class="symbol"></div>
+        <h4>Süreç</h4>
+        <ul>
+          <li>Prototipleme</li>
+          <li>Playtest yönetimi</li>
+          <li>Doküman yazımı (GDD)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="section-head">
+      <span class="num">04</span>
+      <h2>İletişim</h2>
+    </div>
+    <div class="signoff reveal">
+      <div>
+        <h2>Yeni bir proje mi<br>konuşalım?</h2>
+        <p>İş birliği, freelance görevler veya sadece merhaba demek için buradan ulaşabilirsin.</p>
+        <div class="cta-row">
+          <a class="btn solid" href="mailto:your.email@example.com">E-posta gönder</a>
+          <a class="btn" href="https://www.linkedin.com/in/your-profile" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="https://github.com/your-username" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+      <div class="stamp"><span>ONAYLANDI<br>REV. 01</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 YOUR NAME</span>
+    <span>DWG NO. 001 — SCALE 1:1</span>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <span class="modal-close" id="modalClose">Kapat ✕</span>
+    <iframe id="modalIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  // Video modal
+  const overlay = document.getElementById('modalOverlay');
+  const iframe = document.getElementById('modalIframe');
+  document.querySelectorAll('.level-card').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      const id = card.getAttribute('data-video');
+      if(!id) return;
+      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+      overlay.classList.add('open');
+    });
+  });
+  function closeModal(){
+    overlay.classList.remove('open');
+    iframe.src = '';
+  }
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
+</script>
+
+</body>
+</html>

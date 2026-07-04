@@ -239,11 +239,15 @@
     overflow:hidden;
   }
   .level-thumb img{
-    width:100%;height:100%;object-fit:cover;
+    position:absolute;
+    inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
     opacity:.75;
-    transition:opacity .3s, transform .4s;
+    filter:brightness(.55);
+    transition:opacity .3s, transform .4s, filter .3s;
   }
-  .level-card:hover .level-thumb img{opacity:1;transform:scale(1.03);}
+  .level-card:hover .level-thumb img{opacity:1;transform:scale(1.03);filter:brightness(.7);}
   .play-btn{
     position:relative;z-index:2;
     width:56px;height:56px;
@@ -291,7 +295,7 @@
   /* SKILLS / LEGEND */
   .legend{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(2,1fr);
     gap:1px;
     background:var(--grid-line);
     border:1px solid var(--grid-line);
@@ -583,7 +587,7 @@
     <div class="levels">
 
 
-      <div class="level-card reveal" data-video="7e_8SqBUa9E" data-github="https://github.com/Unleashed-Pomeranian/Enjoy_Your_Stay">
+      <div class="level-card reveal" data-video="7e_8SqBUa9E" data-github="https://github.com/Unleashed-Pomeranian/Enjoy_Your_Stay" data-itch="https://your-username.itch.io/enjoy-your-stay">
         <div class="level-thumb">
           <img src="https://img.youtube.com/vi/7e_8SqBUa9E/hqdefault.jpg" alt="Project 4 video preview">
           <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -642,7 +646,7 @@
         </div>
       </div>
 
-      <div class="level-card reveal" data-video="kEVndAYbvbE" data-github="https://github.com/Hoviaq/GAD2006_FinalProject-ReberAkdag-2101490">
+      <div class="level-card reveal" data-video="kEVndAYbvbE" data-github="https://github.com/Hoviaq/GAD2006_FinalProject-ReberAkdag-2101490" data-itch="https://your-username.itch.io/unless-runner">
         <div class="level-thumb">
           <img src="https://img.youtube.com/vi/kEVndAYbvbE/hqdefault.jpg" alt="Project 1 video preview">
           <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -674,9 +678,32 @@
         <div class="symbol"></div>
         <h4>Programming</h4>
         <ul>
-          <li>C++ in Unreal Engine 5</li>
-          <li>Blueprint scripting</li>
-          <li>Gameplay systems</li>
+          <li>C++</li>
+          <li>Object-Oriented Programming</li>
+          <li>Blueprint Scripting</li>
+          <li>Gameplay Systems</li>
+        </ul>
+      </div>
+      <div class="legend-item reveal">
+        <div class="symbol"></div>
+        <h4>Gameplay &amp; Systems</h4>
+        <ul>
+          <li>AI Behaviors</li>
+          <li>Interaction Systems</li>
+          <li>Mission Systems</li>
+          <li>UI Implementation</li>
+          <li>VR Development</li>
+        </ul>
+      </div>
+      <div class="legend-item reveal">
+        <div class="symbol"></div>
+        <h4>Tools &amp; Workflow</h4>
+        <ul>
+          <li>Git / GitHub</li>
+          <li>Visual Studio</li>
+          <li>Prototyping</li>
+          <li>Playtesting</li>
+          <li>Technical Documentation</li>
         </ul>
       </div>
       <div class="legend-item reveal">
@@ -686,15 +713,6 @@
           <li>Animation in Maya</li>
           <li>Modeling in Blender</li>
           <li>Texturing in Substance Painter</li>
-        </ul>
-      </div>
-      <div class="legend-item reveal">
-        <div class="symbol"></div>
-        <h4>Process</h4>
-        <ul>
-          <li>Prototyping</li>
-          <li>Playtesting</li>
-          <li>Documentation</li>
         </ul>
       </div>
     </div>
@@ -732,7 +750,7 @@
     </div>
     <div class="signoff reveal">
       <div>
-        <h2>Let’s make<br>something together.</h2>
+        <h2>Let's make<br>something together.</h2>
         <p>Open to new opportunities in Unreal Engine and gameplay development. Feel free to reach out.</p>
         <div class="cta-row">
           <a class="btn solid" href="mailto:akdagreber684@gmail.com">Send an email</a>
@@ -770,7 +788,10 @@
       <h3 id="modalTitle">Project Title</h3>
       <p id="modalDesc">Project description.</p>
       <div class="chips" id="modalChips"></div>
-      <a class="btn solid" id="modalGithub" href="#" target="_blank" rel="noopener">View on GitHub</a>
+      <div class="cta-row">
+        <a class="btn solid" id="modalGithub" href="#" target="_blank" rel="noopener">View on GitHub</a>
+        <a class="btn" id="modalItch" href="#" target="_blank" rel="noopener">View on itch.io</a>
+      </div>
     </div>
   </div>
 </div>
@@ -793,6 +814,7 @@
   const modalDesc = document.getElementById('modalDesc');
   const modalChips = document.getElementById('modalChips');
   const modalGithub = document.getElementById('modalGithub');
+  const modalItch = document.getElementById('modalItch');
 
   document.querySelectorAll('.level-card').forEach(card=>{
     card.addEventListener('click', ()=>{
@@ -819,6 +841,14 @@
         modalGithub.style.display = 'inline-block';
       } else {
         modalGithub.style.display = 'none';
+      }
+
+      const itchUrl = card.getAttribute('data-itch');
+      if(itchUrl){
+        modalItch.href = itchUrl;
+        modalItch.style.display = 'inline-block';
+      } else {
+        modalItch.style.display = 'none';
       }
 
       overlay.classList.add('open');
